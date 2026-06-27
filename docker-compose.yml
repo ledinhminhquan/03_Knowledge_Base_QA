@@ -1,0 +1,17 @@
+services:
+  kbqa:
+    build: .
+    image: kbqa:1.0.0
+    ports:
+      - "7860:7860"      # REST API + Gradio UI (UI at /ui, docs at /docs)
+    environment:
+      - KBQA_ARTIFACTS_DIR=/app/artifacts
+      - HF_HOME=/app/.cache/huggingface
+      # - KBQA_LLM_API_KEY=${KBQA_LLM_API_KEY}   # enable the optional LLM brain
+    volumes:
+      - ./artifacts:/app/artifacts          # persist the FAISS index + trained models
+      - hf_cache:/app/.cache/huggingface
+    restart: unless-stopped
+
+volumes:
+  hf_cache:
